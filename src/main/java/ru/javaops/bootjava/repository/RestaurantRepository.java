@@ -1,13 +1,12 @@
 package ru.javaops.bootjava.repository;
 
+import ru.javaops.bootjava.model.Restaurant;
+
 import java.util.List;
 
-import ru.javaops.bootjava.model.User;
-
-
-public class UserRepository {
+public class RestaurantRepository {
     // null if not found, when updated
-    User save(User user) {
+    Restaurant save(Restaurant restaurant) {
         return null;
     }
 
@@ -17,16 +16,12 @@ public class UserRepository {
     }
 
     // null if not found
-    User get(int id){
+    Restaurant get(int id) {
         return null;
     }
 
-    // null if not found
-    User getByEmail(String email){
-        return null;
-    }
 
-    List<User> getAll() {
+    List<Restaurant> getAll() {
         return null;
     }
 }

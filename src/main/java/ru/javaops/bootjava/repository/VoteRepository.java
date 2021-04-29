@@ -1,13 +1,12 @@
 package ru.javaops.bootjava.repository;
 
+import ru.javaops.bootjava.model.Vote;
+
 import java.util.List;
 
-import ru.javaops.bootjava.model.User;
-
-
-public class UserRepository {
+public class  VoteRepository {
     // null if not found, when updated
-    User save(User user) {
+    Vote save(Vote vote) {
         return null;
     }
 
@@ -17,16 +16,11 @@ public class UserRepository {
     }
 
     // null if not found
-    User get(int id){
+    Vote get(int id) {
         return null;
     }
 
-    // null if not found
-    User getByEmail(String email){
-        return null;
-    }
-
-    List<User> getAll() {
+    List<Vote> getAll() {
         return null;
     }
 }
