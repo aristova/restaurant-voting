@@ -2,9 +2,12 @@ package ru.javaops.bootjava.repository;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javaops.bootjava.model.User;
 
-
+@Repository
+@Transactional(readOnly = true)
 public class UserRepository {
     // null if not found, when updated
     User save(User user) {

@@ -1,9 +1,12 @@
 package ru.javaops.bootjava.repository;
 
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javaops.bootjava.model.Restaurant;
 
 import java.util.List;
-
+@Repository
+@Transactional(readOnly = true)
 public class RestaurantRepository {
     // null if not found, when updated
     Restaurant save(Restaurant restaurant) {
