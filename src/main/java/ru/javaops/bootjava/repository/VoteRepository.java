@@ -1,29 +1,30 @@
 package ru.javaops.bootjava.repository;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+import ru.javaops.bootjava.model.User;
 import ru.javaops.bootjava.model.Vote;
 
-import java.util.List;
-@Repository
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.Optional;
+
 @Transactional(readOnly = true)
-public class  VoteRepository {
-    // null if not found, when updated
-    Vote save(Vote vote) {
-        return null;
-    }
+public interface VoteRepository extends JpaRepository<Vote, Integer> {
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Vote v WHERE v.id=:id")
+    int delete(@Param("id") int id);
 
-    // false if not found
-    boolean delete(int id) {
-        return false;
-    }
+    @Query("SELECT v FROM Vote v JOIN FETCH v.user WHERE v.id = ?1 and v.user.id = ?2")
+    Vote getWithUser(int id, int userId);
 
-    // null if not found
-    Vote get(int id) {
-        return null;
-    }
+    Page<Vote> findByRestaurantId(Integer restaurantId, Pageable pageable);
+    Optional<Vote> findByIdAndRestaurantId(Integer id, Integer restaurantId);
 
-    List<Vote> getAll() {
-        return null;
-    }
 }

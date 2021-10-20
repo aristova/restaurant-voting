@@ -1,35 +1,26 @@
 package ru.javaops.bootjava.repository;
 
-import java.util.List;
-
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javaops.bootjava.model.User;
 
-@Repository
+import java.util.List;
+
+
 @Transactional(readOnly = true)
-public class UserRepository {
-    // null if not found, when updated
-    User save(User user) {
-        return null;
-    }
+public interface UserRepository extends JpaRepository<User, Integer> {
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM User u WHERE u.id=:id")
+    int delete(@Param("id") int id);
 
-    // false if not found
-    boolean delete(int id) {
-        return false;
-    }
+    User findByEmail(String email);
+    User findOneByName(String name);
+    User findByName(String name);
 
-    // null if not found
-    User get(int id){
-        return null;
-    }
-
-    // null if not found
-    User getByEmail(String email){
-        return null;
-    }
-
-    List<User> getAll() {
-        return null;
-    }
+    User getUserByName(String username);
 }

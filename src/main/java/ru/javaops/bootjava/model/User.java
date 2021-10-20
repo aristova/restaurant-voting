@@ -1,21 +1,21 @@
 package ru.javaops.bootjava.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
+@Transactional
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
 public class User extends BaseEntity {
 
@@ -27,20 +27,17 @@ public class User extends BaseEntity {
 
     @NotBlank
     @Size(min = 2, max = 100)
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @Column(name = "password", nullable = false)
     @NotBlank
     @Size(min = 5, max = 100)
+    @JsonIgnore
     private String password;
 
     @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
     private boolean enabled = true;
-
-    @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()")
-    @NotNull
-    private Date registered = new Date();
 
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role"}, name = "user_roles_unique")})
@@ -48,13 +45,13 @@ public class User extends BaseEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
-    public User(Integer id, String email, String firstName, String password, Role role, Role... roles) {
-        this(email, firstName, password, true, new Date(), EnumSet.of(role, roles));
+    public User(Integer id, String email, String name, String password, Role role, Role... roles) {
+        this(email, name, password, true, EnumSet.of(role, roles));
         this.id = id;
     }
     public User() {}
 
-    public <E extends Enum<E>> User(String email, String firstName, String password, boolean enabled, Date registered, Collection<Role> roles) {
+    public <E extends Enum<E>> User(String email, String name, String password, boolean enabled, Collection<Role> roles) {
         super();
     }
 
@@ -63,29 +60,24 @@ public class User extends BaseEntity {
     }
 
     @Override
-    public Integer getId() {
-        return null;
-    }
-
-    @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", email=" + email +
-                ", name=" + email +
-                ", enabled= }";
+                ", name=" + name +
+                ", enabled=" + enabled + "}";
     }
 
     public String getEmail() {
         return email;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
@@ -102,14 +94,6 @@ public class User extends BaseEntity {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public Date getRegistered() {
-        return registered;
-    }
-
-    public void setRegistered(Date registered) {
-        this.registered = registered;
     }
 
     public Set<Role> getRoles() {

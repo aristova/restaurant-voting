@@ -1,19 +1,20 @@
 package ru.javaops.bootjava.model;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Collection;
-import java.util.EnumSet;
 
 @Entity
+@Transactional
 @Table(name = "restaurants", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "name_unique_idx")})
 public class Restaurant extends BaseEntity {
     @NotBlank
-    @Size(min = 1, max = 100)
+    @Size(min = 2, max = 100)
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -37,8 +38,4 @@ public class Restaurant extends BaseEntity {
         this.name = name;
     }
 
-    @Override
-    public Integer getId() {
-        return null;
-    }
 }

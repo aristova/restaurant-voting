@@ -1,6 +1,10 @@
 package ru.javaops.bootjava.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -8,15 +12,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
-// TODO Add the field date
 @Entity
+@Transactional
 @Table(name = "dishes")
 public class Dish extends BaseEntity {
-
-    @Column(name = "date", nullable = false)
-    @NotNull
-    @Temporal(TemporalType.DATE)
-    Date date;
 
     @NotBlank
     @Size(min = 2, max = 100)
@@ -27,30 +26,28 @@ public class Dish extends BaseEntity {
     @Range(min = 0, max = 100000)
     private int price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "date", nullable = false)
     @NotNull
+    @Temporal(TemporalType.DATE)
+    Date date;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "restaurant_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Restaurant restaurant;
 
 
-    public Dish(Integer id, String name, int price, Date date) {
-        this(name, price, date);
+    public Dish(Integer id, String name, int price, Date date, Restaurant restaurant) {
+        this(name, price, date, restaurant);
         this.id = id;
     }
 
     public Dish() {
     }
 
-    public <E extends Enum<E>> Dish(String name, int price, Date date) {
+    public <E extends Enum<E>> Dish(String name, int price, Date date, Restaurant restaurant) {
         super();
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     public String getName() {
@@ -61,9 +58,21 @@ public class Dish extends BaseEntity {
         this.name = name;
     }
 
-    @Override
-    public Integer getId() {
-        return null;
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
 
@@ -75,12 +84,5 @@ public class Dish extends BaseEntity {
         this.restaurant = restaurant;
     }
 
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
 
 }
