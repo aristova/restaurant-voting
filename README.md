@@ -1,7 +1,7 @@
 # Restaurant Voting System
 
 A REST API for a lunch-place voting system: registered users vote for the restaurant where they want to have lunch, and administrators manage restaurants and their daily menus.
- 
+Built as a test assignment.
 
 ---
 
